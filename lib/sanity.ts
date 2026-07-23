@@ -1,9 +1,35 @@
 import type { Credential, Experience, Locale, Project } from "@/lib/content";
 
 export type CmsContent = {
+  profile: {
+    displayName: string;
+    headline?: string;
+    introduction?: string;
+    location?: string;
+    email?: string;
+    linkedinUrl?: string;
+    githubUrl?: string;
+    portraitUrl?: string;
+    cvUrl?: string;
+  } | null;
   projects: Project[];
   experience: Experience[];
-  credentials: Credential[];
+  credentials: Array<
+    Credential & {
+      verificationUrl?: string;
+      certificateImageUrl?: string;
+      certificateFileUrl?: string;
+    }
+  >;
+  courses: Array<{
+    title: string;
+    provider: string;
+    stage: "planned" | "inProgress" | "completed";
+    description: string;
+    progress?: number;
+    courseUrl?: string;
+    evidenceUrl?: string;
+  }>;
 };
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -16,6 +42,17 @@ function languageField(locale: Locale) {
 }
 
 const query = `{
+  "profile": *[_type == "profile"][0] {
+    displayName,
+    "headline": coalesce(headline[$lang], headline.en),
+    "introduction": coalesce(introduction[$lang], introduction.en),
+    "location": coalesce(location[$lang], location.en),
+    email,
+    linkedinUrl,
+    githubUrl,
+    "portraitUrl": portrait.asset->url,
+    "cvUrl": currentCv.asset->url
+  },
   "projects": *[_type == "project" && published == true] | order(order asc) {
     "number": coalesce(number, "00"),
     "title": coalesce(title[$lang], title.en),
@@ -35,7 +72,19 @@ const query = `{
     "title": title,
     "provider": provider,
     "status": coalesce(status[$lang], status.en),
-    "focus": coalesce(focus[$lang], focus.en)
+    "focus": coalesce(focus[$lang], focus.en),
+    verificationUrl,
+    "certificateImageUrl": certificateImage.asset->url,
+    "certificateFileUrl": certificateFile.asset->url
+  },
+  "courses": *[_type == "course" && published == true] | order(order asc) {
+    title,
+    "provider": coalesce(provider, ""),
+    "stage": coalesce(stage, "planned"),
+    "description": coalesce(description[$lang], description.en),
+    progress,
+    courseUrl,
+    "evidenceUrl": evidence.asset->url
   }
 }`;
 

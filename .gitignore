@@ -45,4 +45,8 @@ next-env.d.ts
 /work/
 /.doc-review/
 /studio/node_modules/
+/studio/.sanity/
+/studio/dist/
+/studio/seed.ndjson
+/.sanity-login.*.log
 tsconfig.tsbuildinfo

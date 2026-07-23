@@ -3,6 +3,14 @@ import type { Locale, PageKey } from "@/lib/content";
 import { content } from "@/lib/content";
 import type { CmsContent } from "@/lib/sanity";
 
+const defaultProfile = {
+  displayName: "Gabriel Gomes",
+  email: "gabrielhumbert@outlook.com",
+  linkedinUrl: "https://www.linkedin.com/in/gabrielghumbert/",
+  githubUrl: "https://github.com/GabrielHumbertDev",
+  cvUrl: "/Gabriel-Gomes-CV.pdf",
+};
+
 const pagePaths: Record<PageKey, string> = {
   home: "",
   experience: "/experience",
@@ -32,23 +40,38 @@ function BrandMark() {
   );
 }
 
+function BrandName({ displayName }: { displayName: string }) {
+  const [firstName, ...remainingNames] = displayName.trim().split(/\s+/);
+  return (
+    <span>
+      {firstName.toUpperCase()}{" "}
+      <strong>{remainingNames.join(" ").toUpperCase()}</strong>
+    </span>
+  );
+}
+
 function Header({
   locale,
   page,
+  cms,
 }: {
   locale: Locale;
   page: PageKey;
+  cms?: CmsContent | null;
 }) {
   const t = content[locale];
   const navItems: PageKey[] = ["home", "experience", "projects", "credentials"];
+  const profile = { ...defaultProfile, ...cms?.profile };
 
   return (
     <header className="site-header">
-      <Link href={`/${locale}`} className="brand" aria-label="Gabriel Gomes home">
+      <Link
+        href={`/${locale}`}
+        className="brand"
+        aria-label={`${profile.displayName} home`}
+      >
         <BrandMark />
-        <span>
-          GABRIEL <strong>GOMES</strong>
-        </span>
+        <BrandName displayName={profile.displayName} />
       </Link>
 
       <nav className="desktop-nav" aria-label="Main navigation">
@@ -77,7 +100,7 @@ function Header({
             </Link>
           ))}
         </div>
-        <a className="header-cv" href="/Gabriel-Gomes-CV.pdf" download>
+        <a className="header-cv" href={profile.cvUrl} download>
           {t.nav.cv}
           <Arrow diagonal />
         </a>
@@ -92,7 +115,7 @@ function Header({
                 {t.nav[item]}
               </Link>
             ))}
-            <a href="mailto:gabrielhumbert@outlook.com">{t.nav.contact}</a>
+            <a href={`mailto:${profile.email}`}>{t.nav.contact}</a>
           </div>
         </details>
       </div>
@@ -100,8 +123,15 @@ function Header({
   );
 }
 
-function Footer({ locale }: { locale: Locale }) {
+function Footer({
+  locale,
+  cms,
+}: {
+  locale: Locale;
+  cms?: CmsContent | null;
+}) {
   const t = content[locale];
+  const profile = { ...defaultProfile, ...cms?.profile };
   return (
     <footer className="site-footer" id="contact">
       <div className="footer-orbit" aria-hidden="true">
@@ -112,7 +142,7 @@ function Footer({ locale }: { locale: Locale }) {
         <p className="eyebrow">{t.sections.contact.eyebrow}</p>
         <h2>{t.sections.contact.title}</h2>
         <p>{t.sections.contact.intro}</p>
-        <a className="button button-primary" href="mailto:gabrielhumbert@outlook.com">
+        <a className="button button-primary" href={`mailto:${profile.email}`}>
           {t.sections.contact.action}
           <Arrow />
         </a>
@@ -120,21 +150,19 @@ function Footer({ locale }: { locale: Locale }) {
       <div className="footer-bottom">
         <div className="brand footer-brand">
           <BrandMark />
-          <span>
-            GABRIEL <strong>GOMES</strong>
-          </span>
+          <BrandName displayName={profile.displayName} />
         </div>
         <p>{t.footer}</p>
         <div className="social-links">
           <a
-            href="https://www.linkedin.com/in/gabrielghumbert/"
+            href={profile.linkedinUrl}
             target="_blank"
             rel="noreferrer"
           >
             LinkedIn <Arrow diagonal />
           </a>
           <a
-            href="https://github.com/GabrielHumbertDev"
+            href={profile.githubUrl}
             target="_blank"
             rel="noreferrer"
           >
@@ -149,19 +177,21 @@ function Footer({ locale }: { locale: Locale }) {
 function Shell({
   locale,
   page,
+  cms,
   children,
 }: {
   locale: Locale;
   page: PageKey;
+  cms?: CmsContent | null;
   children: React.ReactNode;
 }) {
   return (
     <div className="site-frame" lang={locale}>
       <div className="ambient ambient-one" aria-hidden="true" />
       <div className="ambient ambient-two" aria-hidden="true" />
-      <Header locale={locale} page={page} />
+      <Header locale={locale} page={page} cms={cms} />
       <main>{children}</main>
-      <Footer locale={locale} />
+      <Footer locale={locale} cms={cms} />
     </div>
   );
 }
@@ -296,15 +326,21 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
     projects: cms?.projects?.length ? cms.projects : base.projects,
   };
   return (
-    <Shell locale={locale} page="home">
+    <Shell locale={locale} page="home" cms={cms}>
       <section className="hero-section">
         <div className="hero-copy">
           <p className="eyebrow">{t.hero.eyebrow}</p>
-          <h1>
-            {t.hero.titleStart} <em>{t.hero.titleAccent}</em>{" "}
-            {t.hero.titleEnd}
-          </h1>
-          <p className="hero-intro">{t.hero.intro}</p>
+          {cms?.profile?.headline ? (
+            <h1>{cms.profile.headline}</h1>
+          ) : (
+            <h1>
+              {t.hero.titleStart} <em>{t.hero.titleAccent}</em>{" "}
+              {t.hero.titleEnd}
+            </h1>
+          )}
+          <p className="hero-intro">
+            {cms?.profile?.introduction || t.hero.intro}
+          </p>
           <div className="hero-actions">
             <Link className="button button-primary" href={`/${locale}/projects`}>
               {t.hero.primary}
@@ -409,7 +445,7 @@ function ExperiencePage({
     experience: cms?.experience?.length ? cms.experience : base.experience,
   };
   return (
-    <Shell locale={locale} page="experience">
+    <Shell locale={locale} page="experience" cms={cms}>
       <PageHero
         eyebrow={t.sections.journey.eyebrow}
         title={t.sections.journey.title}
@@ -462,7 +498,7 @@ function ProjectsPage({
     projects: cms?.projects?.length ? cms.projects : base.projects,
   };
   return (
-    <Shell locale={locale} page="projects">
+    <Shell locale={locale} page="projects" cms={cms}>
       <PageHero
         eyebrow={t.sections.projects.eyebrow}
         title={t.sections.projects.title}
@@ -494,8 +530,25 @@ function CredentialsPage({
     ...base,
     credentials: cms?.credentials?.length ? cms.credentials : base.credentials,
   };
+  const courseStage = {
+    planned: {
+      en: "Planned",
+      es: "Planificado",
+      "pt-br": "Planejado",
+    },
+    inProgress: {
+      en: "In progress",
+      es: "En curso",
+      "pt-br": "Em andamento",
+    },
+    completed: {
+      en: "Completed",
+      es: "Completado",
+      "pt-br": "Concluído",
+    },
+  } as const;
   return (
-    <Shell locale={locale} page="credentials">
+    <Shell locale={locale} page="credentials" cms={cms}>
       <PageHero
         eyebrow={t.sections.credentials.eyebrow}
         title={t.sections.credentials.title}
@@ -520,6 +573,46 @@ function CredentialsPage({
             <div className="progress-track" aria-hidden="true">
               <span style={{ width: `${35 + index * 12}%` }} />
             </div>
+            {"verificationUrl" in credential && credential.verificationUrl ? (
+              <a
+                className="credential-link"
+                href={credential.verificationUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Verify credential <Arrow diagonal />
+              </a>
+            ) : null}
+          </article>
+        ))}
+        {cms?.courses.map((course, index) => (
+          <article className="credential-card" key={`${course.title}-${index}`}>
+            <div className="credential-topline">
+              <span>C{String(index + 1).padStart(2, "0")}</span>
+              <span className="status-pill">
+                <i />
+                {courseStage[course.stage][locale]}
+              </span>
+            </div>
+            <div className="credential-seal" aria-hidden="true">
+              <span>{(course.provider || "CO").slice(0, 2).toUpperCase()}</span>
+            </div>
+            <p>{course.provider}</p>
+            <h2>{course.title}</h2>
+            <span className="credential-focus">{course.description}</span>
+            <div className="progress-track" aria-hidden="true">
+              <span style={{ width: `${course.progress ?? 0}%` }} />
+            </div>
+            {course.courseUrl ? (
+              <a
+                className="credential-link"
+                href={course.courseUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View course <Arrow diagonal />
+              </a>
+            ) : null}
           </article>
         ))}
         <article className="education-card credentials-education">

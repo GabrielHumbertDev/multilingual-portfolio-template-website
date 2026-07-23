@@ -1190,6 +1190,22 @@ a:hover .arrow {
   line-height: 1.55;
 }
 
+.credential-link {
+  position: absolute;
+  bottom: 49px;
+  left: 32px;
+  color: var(--text);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.credential-link:hover {
+  color: var(--cyan);
+}
+
 .progress-track {
   position: absolute;
   right: 32px;

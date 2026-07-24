@@ -4,7 +4,7 @@ import { content } from "@/lib/content";
 import type { CmsContent } from "@/lib/sanity";
 
 const defaultProfile = {
-  displayName: "Gabriel Gomes",
+  displayName: "Gabriel Humbert",
   email: "gabrielhumbert@outlook.com",
   linkedinUrl: "https://www.linkedin.com/in/gabrielghumbert/",
   githubUrl: "https://github.com/GabrielHumbertDev",
@@ -148,9 +148,15 @@ function Footer({
         </a>
       </div>
       <div className="footer-bottom">
-        <div className="brand footer-brand">
-          <BrandMark />
-          <BrandName displayName={profile.displayName} />
+        <div className="footer-signature">
+          <span className="signature-object" aria-hidden="true">
+            <span>GH</span>
+            <i />
+          </span>
+          <span className="signature-copy">
+            <strong>{profile.displayName}</strong>
+            <small>Gabriel Humbert Dev</small>
+          </span>
         </div>
         <p>{t.footer}</p>
         <div className="social-links">
@@ -158,15 +164,31 @@ function Footer({
             href={profile.linkedinUrl}
             target="_blank"
             rel="noreferrer"
+            aria-label="Open Gabriel Humbert's LinkedIn profile"
           >
-            LinkedIn <Arrow diagonal />
+            <span className="social-monogram" aria-hidden="true">
+              in
+            </span>
+            <span className="social-copy">
+              <strong>LinkedIn</strong>
+              <small>linkedin.com</small>
+            </span>
+            <span className="social-status" aria-hidden="true" />
           </a>
           <a
             href={profile.githubUrl}
             target="_blank"
             rel="noreferrer"
+            aria-label="Open Gabriel Humbert's GitHub profile"
           >
-            GitHub <Arrow diagonal />
+            <span className="social-monogram social-monogram-github" aria-hidden="true">
+              gh
+            </span>
+            <span className="social-copy">
+              <strong>GitHub</strong>
+              <small>github.com</small>
+            </span>
+            <span className="social-status" aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -252,8 +274,11 @@ function CapabilityGrid({ locale }: { locale: Locale }) {
     <section className="content-section capabilities-section">
       <SectionHeading {...t.sections.capabilities} />
       <div className="capability-grid">
-        {t.capabilities.map((capability) => (
-          <article className="capability-card" key={capability.code}>
+        {t.capabilities.map((capability, index) => (
+          <article
+            className={`capability-card ${index === 0 ? "material-prototype" : ""}`}
+            key={capability.code}
+          >
             <span className="card-code">{capability.code}</span>
             <div className="capability-icon" aria-hidden="true">
               <span />
@@ -277,13 +302,17 @@ function ProjectCard({
   project,
   action,
   large = false,
+  prototype = false,
 }: {
   project: (typeof content)["en"]["projects"][number];
   action: string;
   large?: boolean;
+  prototype?: boolean;
 }) {
   return (
-    <article className={`project-card ${large ? "project-card-large" : ""}`}>
+    <article
+      className={`project-card ${large ? "project-card-large" : ""} ${prototype ? "material-prototype" : ""}`}
+    >
       <div className="project-visual" aria-hidden="true">
         <span className="project-number">{project.number}</span>
         <div className="project-window">
@@ -379,6 +408,7 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
               project={project}
               action={t.common.viewProject}
               large={index === 0}
+              prototype={index === 0}
             />
           ))}
         </div>
@@ -511,6 +541,7 @@ function ProjectsPage({
             project={project}
             action={t.common.viewProject}
             large={index % 3 === 0}
+            prototype={index === 0}
           />
         ))}
       </section>

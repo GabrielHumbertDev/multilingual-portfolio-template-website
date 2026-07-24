@@ -105,7 +105,7 @@ export const content: Record<Locale, Translation> = {
       titleAccent: "engineered",
       titleEnd: "around people.",
       intro:
-        "I’m Gabriel Gomes, a London-based HRIS Analyst supporting SAP SuccessFactors across a global organisation. I combine enterprise-system thinking, software engineering and responsible AI to turn complex operational needs into clear, secure solutions.",
+        "I’m Gabriel Humbert, a London-based HRIS Analyst supporting SAP SuccessFactors across a global organisation. I combine enterprise-system thinking, software engineering and responsible AI to turn complex operational needs into clear, secure solutions.",
       primary: "Explore my work",
       secondary: "Meet the person behind the systems",
       availability: "Open to conversations in English, Spanish and Portuguese",
@@ -306,7 +306,8 @@ export const content: Record<Locale, Translation> = {
       detail:
         "Awarded 2:1. Final-year project: a hybrid ML/DL Android malware-detection system with Python analysis tools and on-device TensorFlow Lite detection.",
     },
-    footer: "Designed around clarity, built for continuous growth.",
+    footer:
+      "Designed around clarity, built for continuous growth. Built by Gabriel Humbert Dev.",
     common: {
       viewProject: "Open repository",
       github: "GitHub",
@@ -332,7 +333,7 @@ export const content: Record<Locale, Translation> = {
       titleAccent: "diseñados",
       titleEnd: "alrededor de las personas.",
       intro:
-        "Soy Gabriel Gomes, analista HRIS en Londres, dando soporte a SAP SuccessFactors en una organización global. Combino sistemas empresariales, ingeniería de software e IA responsable para convertir necesidades complejas en soluciones claras y seguras.",
+        "Soy Gabriel Humbert, analista HRIS en Londres, dando soporte a SAP SuccessFactors en una organización global. Combino sistemas empresariales, ingeniería de software e IA responsable para convertir necesidades complejas en soluciones claras y seguras.",
       primary: "Explorar mi trabajo",
       secondary: "Conocer a la persona detrás de los sistemas",
       availability: "Disponible para conversar en inglés, español y portugués",
@@ -533,7 +534,8 @@ export const content: Record<Locale, Translation> = {
       detail:
         "Calificación 2:1. Proyecto final: sistema híbrido ML/DL para detectar malware Android, con análisis en Python y detección TensorFlow Lite en el dispositivo.",
     },
-    footer: "Diseñado para la claridad, construido para crecer.",
+    footer:
+      "Diseñado para la claridad, construido para crecer. Creado por Gabriel Humbert Dev.",
     common: {
       viewProject: "Abrir repositorio",
       github: "GitHub",
@@ -559,7 +561,7 @@ export const content: Record<Locale, Translation> = {
       titleAccent: "projetados",
       titleEnd: "em torno das pessoas.",
       intro:
-        "Sou Gabriel Gomes, analista de HRIS em Londres, apoiando SAP SuccessFactors em uma organização global. Uno sistemas empresariais, engenharia de software e IA responsável para transformar necessidades complexas em soluções claras e seguras.",
+        "Sou Gabriel Humbert, analista de HRIS em Londres, apoiando SAP SuccessFactors em uma organização global. Uno sistemas empresariais, engenharia de software e IA responsável para transformar necessidades complexas em soluções claras e seguras.",
       primary: "Explorar meu trabalho",
       secondary: "Conhecer a pessoa por trás dos sistemas",
       availability: "Disponível para conversar em inglês, espanhol e português",
@@ -760,7 +762,8 @@ export const content: Record<Locale, Translation> = {
       detail:
         "Resultado 2:1. Projeto final: sistema híbrido ML/DL para detectar malware Android, com análise em Python e detecção TensorFlow Lite no dispositivo.",
     },
-    footer: "Projetado para clareza, construído para evoluir.",
+    footer:
+      "Projetado para clareza, construído para evoluir. Criado por Gabriel Humbert Dev.",
     common: {
       viewProject: "Abrir repositório",
       github: "GitHub",

@@ -301,17 +301,15 @@ function CapabilityGrid({ locale }: { locale: Locale }) {
 function ProjectCard({
   project,
   action,
-  large = false,
   prototype = false,
 }: {
   project: (typeof content)["en"]["projects"][number];
   action: string;
-  large?: boolean;
   prototype?: boolean;
 }) {
   return (
     <article
-      className={`project-card ${large ? "project-card-large" : ""} ${prototype ? "material-prototype" : ""}`}
+      className={`project-card ${prototype ? "material-prototype" : ""}`}
     >
       <div className="project-visual" aria-hidden="true">
         <span className="project-number">{project.number}</span>
@@ -402,12 +400,11 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
       <section className="content-section selected-projects">
         <SectionHeading {...t.sections.projects} />
         <div className="project-grid">
-          {t.projects.slice(0, 3).map((project, index) => (
+          {t.projects.slice(0, 4).map((project, index) => (
             <ProjectCard
               key={project.title}
               project={project}
               action={t.common.viewProject}
-              large={index === 0}
               prototype={index === 0}
             />
           ))}
@@ -540,7 +537,6 @@ function ProjectsPage({
             key={project.title}
             project={project}
             action={t.common.viewProject}
-            large={index % 3 === 0}
             prototype={index === 0}
           />
         ))}

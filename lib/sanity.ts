@@ -104,7 +104,25 @@ export async function getCmsContent(locale: Locale): Promise<CmsContent | null> 
 
     if (!response.ok) return null;
     const payload = (await response.json()) as { result?: CmsContent };
-    return payload.result ?? null;
+    const result = payload.result;
+
+    if (!result?.profile) return result ?? null;
+
+    const replacePreviousPublicName = (value?: string) =>
+      value
+        ?.replaceAll("Gabriel Gomes", "Gabriel Humbert")
+        .replaceAll("Gabriel Gomez", "Gabriel Humbert");
+
+    return {
+      ...result,
+      profile: {
+        ...result.profile,
+        displayName:
+          replacePreviousPublicName(result.profile.displayName) ||
+          "Gabriel Humbert",
+        introduction: replacePreviousPublicName(result.profile.introduction),
+      },
+    };
   } catch {
     return null;
   }

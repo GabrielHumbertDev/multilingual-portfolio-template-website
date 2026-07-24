@@ -17,10 +17,10 @@ const geistMono = Geist_Mono({
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
   const cms = await getCmsContent("en");
-  const displayName = cms?.profile?.displayName || "Gabriel Gomes";
+  const displayName = cms?.profile?.displayName || "Gabriel Humbert";
   const description =
     cms?.profile?.introduction ||
-    "Gabriel Gomes connects SAP SuccessFactors, enterprise systems, software engineering, cybersecurity and responsible AI.";
+    "Gabriel Humbert connects SAP SuccessFactors, enterprise systems, software engineering, cybersecurity and responsible AI.";
   const host =
     requestHeaders.get("x-forwarded-host") || requestHeaders.get("host");
   const protocol = requestHeaders.get("x-forwarded-proto") || "https";
@@ -34,8 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     icons: {
-      icon: "/favicon.svg",
-      shortcut: "/favicon.svg",
+      icon: "/favicon.png",
+      shortcut: "/favicon.png",
     },
     openGraph: {
       type: "website",

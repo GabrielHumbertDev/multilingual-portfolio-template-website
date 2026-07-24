@@ -102,7 +102,6 @@ function Header({
         </div>
         <a className="header-cv" href={profile.cvUrl} download>
           {t.nav.cv}
-          <Arrow diagonal />
         </a>
         <details className="mobile-menu">
           <summary aria-label="Open navigation">
@@ -142,9 +141,11 @@ function Footer({
         <p className="eyebrow">{t.sections.contact.eyebrow}</p>
         <h2>{t.sections.contact.title}</h2>
         <p>{t.sections.contact.intro}</p>
-        <a className="button button-primary" href={`mailto:${profile.email}`}>
+        <a
+          className="button button-primary contact-button"
+          href={`mailto:${profile.email}`}
+        >
           {t.sections.contact.action}
-          <Arrow />
         </a>
       </div>
       <div className="footer-bottom">
@@ -222,25 +223,33 @@ function HoloCore({ labels }: { labels: string[] }) {
   return (
     <div className="holo-scene" aria-hidden="true">
       <div className="scene-grid" />
+      <img
+        className="system-art-backdrop"
+        src="/hero-system-lattice.png"
+        alt=""
+      />
       <div className="holo-ring ring-one" />
       <div className="holo-ring ring-two" />
       <div className="holo-ring ring-three" />
-      <div className="holo-core">
-        <span className="core-face face-one" />
-        <span className="core-face face-two" />
-        <span className="core-face face-three" />
+      <div className="lattice-core">
+        {Array.from({ length: 5 }, (_, index) => (
+          <span
+            className={`lattice-cube lattice-cube-${index + 1}`}
+            key={index}
+          >
+            <i className="lattice-face lattice-front" />
+            <i className="lattice-face lattice-right" />
+            <i className="lattice-face lattice-top" />
+          </span>
+        ))}
         <span className="core-glow" />
       </div>
       {labels.map((label, index) => (
-        <span
-          className={`orbit-node node-${index + 1}`}
-          key={label}
-          style={{ "--node-index": index } as React.CSSProperties}
-        >
+        <span className={`orbit-ball ball-${index + 1}`} key={index}>
           {label}
         </span>
       ))}
-      <div className="scene-caption">
+      <div className="scene-caption scene-caption-hidden">
         <span>GG // SYSTEMS_01</span>
         <span>51.5072° N · 0.1276° W</span>
       </div>
@@ -279,7 +288,6 @@ function CapabilityGrid({ locale }: { locale: Locale }) {
             className={`capability-card ${index === 0 ? "material-prototype" : ""}`}
             key={capability.code}
           >
-            <span className="card-code">{capability.code}</span>
             <div className="capability-icon" aria-hidden="true">
               <span />
               <span />
@@ -312,7 +320,6 @@ function ProjectCard({
       className={`project-card ${prototype ? "material-prototype" : ""}`}
     >
       <div className="project-visual" aria-hidden="true">
-        <span className="project-number">{project.number}</span>
         <div className="project-window">
           <div className="window-bar">
             <span />
@@ -371,11 +378,9 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
           <div className="hero-actions">
             <Link className="button button-primary" href={`/${locale}/projects`}>
               {t.hero.primary}
-              <Arrow />
             </Link>
             <Link className="text-link" href={`/${locale}/experience`}>
               {t.hero.secondary}
-              <Arrow />
             </Link>
           </div>
           <div className="availability">
@@ -411,16 +416,14 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
         </div>
         <Link className="section-cta" href={`/${locale}/projects`}>
           {t.sections.projects.all}
-          <Arrow />
         </Link>
       </section>
 
       <section className="content-section journey-preview">
         <SectionHeading {...t.sections.journey} />
         <div className="journey-line">
-          {t.experience.slice(0, 3).map((item, index) => (
+          {t.experience.slice(0, 3).map((item) => (
             <article key={item.role}>
-              <span className="journey-index">0{index + 1}</span>
               <p>{item.dates}</p>
               <h3>{item.role}</h3>
               <span>{item.organisation}</span>
@@ -429,7 +432,6 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
         </div>
         <Link className="section-cta" href={`/${locale}/experience`}>
           {t.nav.experience}
-          <Arrow />
         </Link>
       </section>
     </Shell>

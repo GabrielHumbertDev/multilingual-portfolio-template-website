@@ -257,6 +257,51 @@ function HoloCore({ labels }: { labels: string[] }) {
   );
 }
 
+const nowLabels: Record<
+  Locale,
+  { eyebrow: string; label: string; learning: string }
+> = {
+  en: {
+    eyebrow: "CURRENT FOCUS",
+    label: "Now",
+    learning: "Expanding applied expertise across networks, security, data and AI.",
+  },
+  es: {
+    eyebrow: "ENFOQUE ACTUAL",
+    label: "Ahora",
+    learning: "Ampliando conocimientos aplicados en redes, seguridad, datos e IA.",
+  },
+  "pt-br": {
+    eyebrow: "FOCO ATUAL",
+    label: "Agora",
+    learning: "Ampliando conhecimentos práticos em redes, segurança, dados e IA.",
+  },
+};
+
+function NowPanel({ locale }: { locale: Locale }) {
+  const t = content[locale];
+  const labels = nowLabels[locale];
+  const currentRole = t.experience[0];
+
+  return (
+    <section className="now-panel" aria-labelledby="current-focus-title">
+      <div className="now-status">
+        <span aria-hidden="true" />
+        {labels.label}
+      </div>
+      <div className="now-copy">
+        <p className="eyebrow">{labels.eyebrow}</p>
+        <h2 id="current-focus-title">{currentRole.role}</h2>
+        <p>{currentRole.summary}</p>
+      </div>
+      <div className="now-learning">
+        <span>{t.sections.credentials.eyebrow}</span>
+        <p>{labels.learning}</p>
+      </div>
+    </section>
+  );
+}
+
 function SectionHeading({
   eyebrow,
   title,
@@ -309,29 +354,26 @@ function CapabilityGrid({ locale }: { locale: Locale }) {
 function ProjectCard({
   project,
   action,
+  index,
   prototype = false,
 }: {
   project: (typeof content)["en"]["projects"][number];
   action: string;
+  index: number;
   prototype?: boolean;
 }) {
   return (
     <article
       className={`project-card ${prototype ? "material-prototype" : ""}`}
     >
-      <div className="project-visual" aria-hidden="true">
-        <div className="project-window">
-          <div className="window-bar">
-            <span />
-            <span />
-            <span />
-          </div>
-          <div className="window-content">
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
+      <div className={`project-visual project-visual-${index + 1}`} aria-hidden="true">
+        <div className="project-art">
+          <span className="project-art-orbit project-art-orbit-one" />
+          <span className="project-art-orbit project-art-orbit-two" />
+          <span className="project-art-core" />
+          <span className="project-art-node project-art-node-one" />
+          <span className="project-art-node project-art-node-two" />
+          <span className="project-art-node project-art-node-three" />
         </div>
         <div className="visual-scanline" />
       </div>
@@ -345,8 +387,8 @@ function ProjectCard({
           ))}
         </div>
         <a href={project.href} target="_blank" rel="noreferrer">
+          <span className="project-link-dot" aria-hidden="true" />
           {action}
-          <Arrow diagonal />
         </a>
       </div>
     </article>
@@ -400,6 +442,8 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
         ))}
       </section>
 
+      <NowPanel locale={locale} />
+
       <CapabilityGrid locale={locale} />
 
       <section className="content-section selected-projects">
@@ -410,6 +454,7 @@ function Home({ locale, cms }: { locale: Locale; cms?: CmsContent | null }) {
               key={project.title}
               project={project}
               action={t.common.viewProject}
+              index={index}
               prototype={index === 0}
             />
           ))}
@@ -539,6 +584,7 @@ function ProjectsPage({
             key={project.title}
             project={project}
             action={t.common.viewProject}
+            index={index}
             prototype={index === 0}
           />
         ))}

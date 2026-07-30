@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Locale, PageKey } from "@/lib/content";
 import { content } from "@/lib/content";
 import type { CmsContent } from "@/lib/sanity";
+import { InteractiveMenu } from "@/components/InteractiveMenu";
 
 const defaultProfile = {
   displayName: "Gabriel Humbert",
@@ -10,6 +11,16 @@ const defaultProfile = {
   githubUrl: "https://github.com/GabrielHumbertDev",
   cvUrl: "/Gabriel-Gomes-CV.pdf",
 };
+
+function resolveProfile(cms?: CmsContent | null) {
+  return {
+    displayName: cms?.profile?.displayName || defaultProfile.displayName,
+    email: cms?.profile?.email || defaultProfile.email,
+    linkedinUrl: cms?.profile?.linkedinUrl || defaultProfile.linkedinUrl,
+    githubUrl: cms?.profile?.githubUrl || defaultProfile.githubUrl,
+    cvUrl: cms?.profile?.cvUrl || defaultProfile.cvUrl,
+  };
+}
 
 const pagePaths: Record<PageKey, string> = {
   home: "",
@@ -61,7 +72,7 @@ function Header({
 }) {
   const t = content[locale];
   const navItems: PageKey[] = ["home", "experience", "projects", "credentials"];
-  const profile = { ...defaultProfile, ...cms?.profile };
+  const profile = resolveProfile(cms);
 
   return (
     <header className="site-header">
@@ -103,20 +114,16 @@ function Header({
         <a className="header-cv" href={profile.cvUrl} download>
           {t.nav.cv}
         </a>
-        <details className="mobile-menu">
-          <summary aria-label="Open navigation">
-            <span />
-            <span />
-          </summary>
-          <div className="mobile-menu-panel">
-            {navItems.map((item) => (
-              <Link key={item} href={localPath(locale, item)}>
-                {t.nav[item]}
-              </Link>
-            ))}
-            <a href={`mailto:${profile.email}`}>{t.nav.contact}</a>
-          </div>
-        </details>
+        <InteractiveMenu
+          links={navItems.map((item) => ({
+            href: localPath(locale, item),
+            label: t.nav[item],
+          }))}
+          contactLabel={t.nav.contact}
+          email={profile.email}
+          cvLabel={t.nav.cv}
+          cvUrl={profile.cvUrl}
+        />
       </div>
     </header>
   );
@@ -130,7 +137,7 @@ function Footer({
   cms?: CmsContent | null;
 }) {
   const t = content[locale];
-  const profile = { ...defaultProfile, ...cms?.profile };
+  const profile = resolveProfile(cms);
   return (
     <footer className="site-footer" id="contact">
       <div className="footer-orbit" aria-hidden="true">

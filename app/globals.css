@@ -2480,6 +2480,21 @@ a:hover .arrow {
   position: relative;
 }
 
+.mobile-menu::after {
+  position: absolute;
+  z-index: 4;
+  top: 40px;
+  right: 0;
+  width: 230px;
+  height: 16px;
+  content: "";
+  pointer-events: none;
+}
+
+.mobile-menu.is-open::after {
+  pointer-events: auto;
+}
+
 .mobile-menu-trigger {
   display: flex;
   width: 42px;

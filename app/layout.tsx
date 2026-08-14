@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { headers } from "next/headers";
-import { getCmsContent } from "@/lib/sanity";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,49 +12,52 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const cms = await getCmsContent("en");
-  const displayName = cms?.profile?.displayName || "Gabriel Humbert";
-  const description =
-    cms?.profile?.introduction ||
-    "Gabriel Humbert connects SAP SuccessFactors, enterprise systems, software engineering, cybersecurity and responsible AI.";
-  const host =
-    requestHeaders.get("x-forwarded-host") || requestHeaders.get("host");
-  const protocol = requestHeaders.get("x-forwarded-proto") || "https";
-  const base = host ? `${protocol}://${host}` : "http://localhost:3000";
+const siteUrl = "https://gabrielhumbertdev.com";
+const socialImage = `${siteUrl}/og.png?v=8`;
+const socialTitle =
+  "Gabriel Humbert — Enterprise systems, engineered around people";
+const socialDescription =
+  "Gabriel Humbert is a London-based HRIS Analyst supporting SAP SuccessFactors across a global organisation, combining enterprise systems, software engineering and responsible AI.";
 
-  return {
-    metadataBase: new URL(base),
-    title: {
-      default: `${displayName} — HRIS, SAP SuccessFactors & Software Engineering`,
-      template: `%s — ${displayName}`,
-    },
-    description,
-    icons: {
-      icon: "/favicon.png",
-      shortcut: "/favicon.png",
-    },
-    openGraph: {
-      type: "website",
-      title: `${displayName} — Enterprise systems, engineered around people`,
-      description,
-      images: [
-        {
-          url: new URL("/og.png", base).toString(),
-          width: 1536,
-          height: 1024,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${displayName} — Enterprise systems, engineered around people`,
-      description,
-      images: [new URL("/og.png", base).toString()],
-    },
-  };
-}
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "HRIS, SAP SuccessFactors & Software Engineering — Gabriel Humbert",
+    template: "%s — Gabriel Humbert",
+  },
+  description: socialDescription,
+  alternates: {
+    canonical: "/en",
+  },
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+  },
+  openGraph: {
+    type: "website",
+    url: `${siteUrl}/en`,
+    siteName: "Gabriel Humbert Dev",
+    locale: "en_GB",
+    title: socialTitle,
+    description: socialDescription,
+    images: [
+      {
+        url: socialImage,
+        secureUrl: socialImage,
+        width: 1536,
+        height: 1024,
+        type: "image/png",
+        alt: "Gabriel Humbert professional portfolio — enterprise systems, HRIS and software engineering",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: socialTitle,
+    description: socialDescription,
+    images: [socialImage],
+  },
+};
 
 export default function RootLayout({
   children,

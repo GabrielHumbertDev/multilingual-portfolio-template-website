@@ -236,6 +236,33 @@ function Footer({
   );
 }
 
+const foundationEditorialByLocale = {
+  en: {
+    status: "Digitally verified credential",
+    issuer: "Tech Industry Gold by TechSkills",
+    title: "Software Development Foundation",
+    date: "Completed 27 Feb 2026",
+    description: "Awarded after completing a Tech Industry Gold accredited FDM training programme and demonstrating industry-aligned foundations in software design, development and implementation. The credential recognises reliable, maintainable code alongside the business, project and professional skills expected in entry-level software-development roles.",
+    action: "Verify credential",
+  },
+  es: {
+    status: "Credencial verificada digitalmente",
+    issuer: "Tech Industry Gold by TechSkills",
+    title: "Software Development Foundation",
+    date: "Completada el 27 feb 2026",
+    description: "Obtenida tras completar un programa de formaci\u00f3n de FDM acreditado por Tech Industry Gold y demostrar fundamentos alineados con la industria en dise\u00f1o, desarrollo e implementaci\u00f3n de software. La credencial reconoce c\u00f3digo fiable y mantenible junto con las capacidades empresariales, de proyecto y profesionales esperadas en puestos iniciales de desarrollo de software.",
+    action: "Verificar credencial",
+  },
+  "pt-br": {
+    status: "Credencial verificada digitalmente",
+    issuer: "Tech Industry Gold by TechSkills",
+    title: "Software Development Foundation",
+    date: "Conclu\u00edda em 27 fev 2026",
+    description: "Concedida ap\u00f3s a conclus\u00e3o de um programa de forma\u00e7\u00e3o da FDM acreditado pelo Tech Industry Gold e a demonstra\u00e7\u00e3o de fundamentos alinhados ao setor em design, desenvolvimento e implementa\u00e7\u00e3o de software. A credencial reconhece c\u00f3digo confi\u00e1vel e sustent\u00e1vel, al\u00e9m das compet\u00eancias de neg\u00f3cios, projetos e profissionais esperadas em fun\u00e7\u00f5es iniciais de desenvolvimento de software.",
+    action: "Verificar credencial",
+  },
+} as const;
+
 function Shell({
   locale,
   page,
@@ -1409,6 +1436,7 @@ function CredentialsPage({
       viewCourse: "Ver curso",
     },
   }[locale];
+  const foundationEditorial = foundationEditorialByLocale[locale];
   return (
     <Shell locale={locale} page="credentials" cms={cms}>
       <PageHero
@@ -1455,6 +1483,32 @@ function CredentialsPage({
               hint={learningEditorial.degreeHint}
               variant="button"
             />
+          </div>
+        </article>
+
+        <article className="earned-credential software-foundation-credential" data-reveal>
+          <div className="earned-credential-visual software-foundation-visual">
+            <span>{learningEditorial.earned}</span>
+            <div className="credential-badge-stage">
+              <div className="credential-badge-orbit software-foundation-orbit" aria-hidden="true" />
+              <div className="software-foundation-badge">
+                <img
+                  src="/tech-industry-gold-software-development-foundation.png"
+                  alt="Tech Industry Gold Software Development Foundation credential badge"
+                />
+              </div>
+            </div>
+            <small>TECH INDUSTRY GOLD · TECHSKILLS · 2026</small>
+          </div>
+          <div className="earned-credential-copy">
+            <span className="verified-pill"><i />{foundationEditorial.status}</span>
+            <p>{foundationEditorial.issuer}</p>
+            <h2>{foundationEditorial.title}</h2>
+            <span className="credential-date">{foundationEditorial.date}</span>
+            <p className="credential-description">{foundationEditorial.description}</p>
+            <a href="https://eu.credential.net/3d6ae095-91b4-4e10-9a2c-ec2796b585ee" target="_blank" rel="noreferrer">
+              {foundationEditorial.action}
+            </a>
           </div>
         </article>
 

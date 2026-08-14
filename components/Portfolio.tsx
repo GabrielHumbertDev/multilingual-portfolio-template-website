@@ -5,7 +5,6 @@ import type { CmsContent } from "@/lib/sanity";
 import { InteractiveMenu } from "@/components/InteractiveMenu";
 import { RevealController } from "@/components/RevealController";
 import { SiteControls } from "@/components/SiteControls";
-import { DegreeCertificateLightbox } from "@/components/DegreeCertificateLightbox";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 
 const defaultProfile = {
@@ -1456,16 +1455,11 @@ function CredentialsPage({
         <article className="earned-credential degree-credential" data-reveal>
           <div className="earned-credential-visual degree-credential-visual">
             <span>{learningEditorial.earned}</span>
-            <div className="credential-badge-stage degree-certificate-stage">
+            <div className="credential-badge-stage degree-shield-stage">
               <div className="credential-badge-orbit degree-certificate-orbit" aria-hidden="true" />
-              <DegreeCertificateLightbox
-                src="/BSc-Computer-Science-Cyber-Security-Certificate-Gabriel-Gomes-2025.png"
-                alt="University of Greenwich Bachelor of Science Computer Science Cyber Security degree certificate awarded to Gabriel Humbert"
-                label={learningEditorial.viewDegree}
-                closeLabel={learningEditorial.closeDegree}
-                hint={learningEditorial.degreeHint}
-                variant="image"
-              />
+              <div className="credential-badge-logo degree-shield-logo">
+                <img src="/university-of-greenwich-shield.png" alt="University of Greenwich coat of arms" />
+              </div>
             </div>
             <small>UNIVERSITY OF GREENWICH · 2025</small>
           </div>
@@ -1475,14 +1469,6 @@ function CredentialsPage({
             <h2>{learningEditorial.degreeTitle}</h2>
             <span className="credential-date">{learningEditorial.degreeDate}</span>
             <p className="credential-description">{learningEditorial.degreeFocus}</p>
-            <DegreeCertificateLightbox
-              src="/BSc-Computer-Science-Cyber-Security-Certificate-Gabriel-Gomes-2025.png"
-              alt="University of Greenwich Bachelor of Science Computer Science Cyber Security degree certificate awarded to Gabriel Humbert"
-              label={learningEditorial.viewDegree}
-              closeLabel={learningEditorial.closeDegree}
-              hint={learningEditorial.degreeHint}
-              variant="button"
-            />
           </div>
         </article>
 

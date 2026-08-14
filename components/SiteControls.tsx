@@ -58,8 +58,9 @@ export function SiteControls({ locale }: { locale: Locale }) {
         aria-label={theme === "dark" ? labels[locale].light : labels[locale].dark}
         title={theme === "dark" ? labels[locale].light : labels[locale].dark}
       >
-        <span className="theme-toggle-orbit" aria-hidden="true">
-          <i />
+        <span className="theme-duet" aria-hidden="true">
+          <span className="theme-moon" />
+          <span className="theme-sun" />
         </span>
       </button>
       <button

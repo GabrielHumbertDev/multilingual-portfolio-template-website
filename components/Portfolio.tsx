@@ -5,6 +5,8 @@ import type { CmsContent } from "@/lib/sanity";
 import { InteractiveMenu } from "@/components/InteractiveMenu";
 import { RevealController } from "@/components/RevealController";
 import { SiteControls } from "@/components/SiteControls";
+import { DegreeCertificateLightbox } from "@/components/DegreeCertificateLightbox";
+import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 
 const defaultProfile = {
   displayName: "Gabriel Humbert",
@@ -45,10 +47,14 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 
 function BrandMark() {
   return (
-    <span className="brand-mark" aria-hidden="true">
-      <span />
-      <span />
-      <span />
+    <span className="brand-symbol" aria-hidden="true">
+      <i className="brand-symbol-orbit brand-symbol-orbit-one" />
+      <i className="brand-symbol-orbit brand-symbol-orbit-two" />
+      <span className="brand-symbol-frame" />
+      <span className="brand-symbol-type">GH</span>
+      <span className="brand-symbol-node brand-symbol-node-one" />
+      <span className="brand-symbol-node brand-symbol-node-two" />
+      <span className="brand-symbol-node brand-symbol-node-three" />
     </span>
   );
 }
@@ -56,10 +62,13 @@ function BrandMark() {
 function BrandName({ displayName }: { displayName: string }) {
   const [firstName, ...remainingNames] = displayName.trim().split(/\s+/);
   return (
-    <span>
-      {firstName.toUpperCase()}{" "}
-      <strong>{remainingNames.join(" ").toUpperCase()}</strong>
-    </span>
+    <>
+      <span className="brand-name-desktop">
+        {firstName.toUpperCase()}{" "}
+        <strong>{remainingNames.join(" ").toUpperCase()}</strong>
+      </span>
+      <span className="brand-name-mobile">DEV</span>
+    </>
   );
 }
 
@@ -75,6 +84,11 @@ function Header({
   const t = content[locale];
   const navItems: PageKey[] = ["home", "experience", "projects", "credentials"];
   const profile = resolveProfile(cms);
+  const languageNames: Record<Locale, string> = {
+    en: "English",
+    es: "Español",
+    "pt-br": "Português",
+  };
 
   return (
     <header className="site-header">
@@ -100,23 +114,41 @@ function Header({
       </nav>
 
       <div className="header-actions">
-        <SiteControls locale={locale} />
-        <div className="language-switcher" aria-label="Language selector">
-          {(["en", "es", "pt-br"] as Locale[]).map((lang) => (
-            <Link
-              key={lang}
-              href={localPath(lang, page)}
-              className={locale === lang ? "active" : ""}
-              hrefLang={lang}
-              lang={lang}
-            >
-              {lang === "pt-br" ? "PT" : lang.toUpperCase()}
-            </Link>
-          ))}
+        <div className="header-utility">
+          <SiteControls locale={locale} />
+          <span className="utility-divider" aria-hidden="true" />
+          <details className="language-menu">
+            <summary aria-label="Choose language">
+              <span>{locale === "pt-br" ? "PT" : locale.toUpperCase()}</span>
+              <i aria-hidden="true" />
+            </summary>
+            <div className="language-options" aria-label="Language selector">
+              {(["en", "es", "pt-br"] as Locale[])
+                .filter((lang) => lang !== locale)
+                .map((lang) => (
+                  <Link
+                    key={lang}
+                    href={localPath(lang, page)}
+                    hrefLang={lang}
+                    lang={lang}
+                  >
+                    <span>{lang === "pt-br" ? "PT" : lang.toUpperCase()}</span>
+                    {languageNames[lang]}
+                  </Link>
+                ))}
+            </div>
+          </details>
+          <span className="utility-divider utility-divider-cv" aria-hidden="true" />
+          <a
+            className="header-cv"
+            href={profile.cvUrl}
+            download
+            aria-label={t.nav.cv}
+            title={t.nav.cv}
+          >
+            <span aria-hidden="true">{t.nav.cv}</span>
+          </a>
         </div>
-        <a className="header-cv" href={profile.cvUrl} download>
-          {t.nav.cv}
-        </a>
         <InteractiveMenu
           links={navItems.map((item) => ({
             href: localPath(locale, item),
@@ -160,10 +192,7 @@ function Footer({
       </div>
       <div className="footer-bottom">
         <div className="footer-signature">
-          <span className="signature-object" aria-hidden="true">
-            <span>GH</span>
-            <i />
-          </span>
+          <BrandMark />
           <span className="signature-copy">
             <strong>{profile.displayName}</strong>
             <small>Gabriel Humbert Dev</small>
@@ -178,7 +207,7 @@ function Footer({
             aria-label="Open Gabriel Humbert's LinkedIn profile"
           >
             <span className="social-monogram" aria-hidden="true">
-              in
+              <FaLinkedinIn />
             </span>
             <span className="social-copy">
               <strong>LinkedIn</strong>
@@ -193,7 +222,7 @@ function Footer({
             aria-label="Open Gabriel Humbert's GitHub profile"
           >
             <span className="social-monogram social-monogram-github" aria-hidden="true">
-              gh
+              <FaGithub />
             </span>
             <span className="social-copy">
               <strong>GitHub</strong>
@@ -302,9 +331,14 @@ function NowPanel({ locale }: { locale: Locale }) {
 
   return (
     <section className="now-panel" aria-labelledby="current-focus-title">
-      <div className="now-status">
-        <span aria-hidden="true" />
-        {labels.label}
+      <div className="now-status" aria-label={labels.label}>
+        <i className="now-orbit now-orbit-one" aria-hidden="true" />
+        <i className="now-orbit now-orbit-two" aria-hidden="true" />
+        <span className="now-core" aria-hidden="true" />
+        <strong className="now-type" aria-hidden="true">{labels.label}</strong>
+        <span className="now-node now-node-one" aria-hidden="true" />
+        <span className="now-node now-node-two" aria-hidden="true" />
+        <span className="now-node now-node-three" aria-hidden="true" />
       </div>
       <div className="now-copy">
         <p className="eyebrow">{labels.eyebrow}</p>
@@ -1311,6 +1345,14 @@ function CredentialsPage({
       issued: "Issued Jun 2024 · Expires Jun 2028",
       certificateFocus: "Independent language-proficiency certification for professional communication.",
       viewLinkedIn: "View on LinkedIn",
+      degreeStatus: "Degree awarded",
+      degreeInstitution: "University of Greenwich",
+      degreeTitle: "BSc (Hons) Computer Science (Cyber Security)",
+      degreeDate: "Awarded 17 Jun 2025 · Second Class Honours (1st Division / 2:1)",
+      degreeFocus: "A security-focused computer science pathway combining software engineering foundations with networks, information security, digital investigation and responsible systems design.",
+      viewDegree: "View degree certificate",
+      closeDegree: "Close degree certificate",
+      degreeHint: "Click the certificate or outside it to return to the website.",
       roadmap: "Current learning roadmap",
       roadmapIntro: "Structured learning across networks, security, analytics and responsible cloud AI.",
       academic: "Academic foundation",
@@ -1327,6 +1369,14 @@ function CredentialsPage({
       issued: "Emitida jun 2024 · Caduca jun 2028",
       certificateFocus: "Certificación independiente de competencia lingüística para la comunicación profesional.",
       viewLinkedIn: "Ver en LinkedIn",
+      degreeStatus: "Título universitario obtenido",
+      degreeInstitution: "University of Greenwich",
+      degreeTitle: "BSc (Hons) Computer Science (Cyber Security)",
+      degreeDate: "Otorgado el 17 jun 2025 · Honores de segunda clase, primera división (2:1)",
+      degreeFocus: "Un itinerario de informática centrado en ciberseguridad que combina fundamentos de ingeniería de software con redes, seguridad de la información, investigación digital y diseño responsable de sistemas.",
+      viewDegree: "Ver certificado universitario",
+      closeDegree: "Cerrar certificado universitario",
+      degreeHint: "Haz clic en el certificado o fuera de él para volver al sitio web.",
       roadmap: "Ruta de aprendizaje actual",
       roadmapIntro: "Aprendizaje estructurado en redes, seguridad, analítica e IA responsable en la nube.",
       academic: "Base académica",
@@ -1343,6 +1393,14 @@ function CredentialsPage({
       issued: "Emitida jun 2024 · Expira jun 2028",
       certificateFocus: "Certificação independente de proficiência linguística para comunicação profissional.",
       viewLinkedIn: "Ver no LinkedIn",
+      degreeStatus: "Graduação concluída",
+      degreeInstitution: "University of Greenwich",
+      degreeTitle: "BSc (Hons) Computer Science (Cyber Security)",
+      degreeDate: "Concedido em 17 jun 2025 · Honras de segunda classe, primeira divisão (2:1)",
+      degreeFocus: "Um percurso de ciência da computação focado em cibersegurança, combinando fundamentos de engenharia de software com redes, segurança da informação, investigação digital e design responsável de sistemas.",
+      viewDegree: "Ver certificado universitário",
+      closeDegree: "Fechar certificado universitário",
+      degreeHint: "Clique no certificado ou fora dele para voltar ao site.",
       roadmap: "Roteiro de aprendizagem atual",
       roadmapIntro: "Aprendizagem estruturada em redes, segurança, análise de dados e IA responsável na nuvem.",
       academic: "Base acadêmica",
@@ -1366,6 +1424,39 @@ function CredentialsPage({
           </div>
           <p>{learningEditorial.intro}</p>
         </div>
+
+        <article className="earned-credential degree-credential" data-reveal>
+          <div className="earned-credential-visual degree-credential-visual">
+            <span>{learningEditorial.earned}</span>
+            <div className="credential-badge-stage degree-certificate-stage">
+              <div className="credential-badge-orbit degree-certificate-orbit" aria-hidden="true" />
+              <DegreeCertificateLightbox
+                src="/BSc-Computer-Science-Cyber-Security-Certificate-Gabriel-Gomes-2025.png"
+                alt="University of Greenwich Bachelor of Science Computer Science Cyber Security degree certificate awarded to Gabriel Humbert"
+                label={learningEditorial.viewDegree}
+                closeLabel={learningEditorial.closeDegree}
+                hint={learningEditorial.degreeHint}
+                variant="image"
+              />
+            </div>
+            <small>UNIVERSITY OF GREENWICH · 2025</small>
+          </div>
+          <div className="earned-credential-copy">
+            <span className="verified-pill"><i />{learningEditorial.degreeStatus}</span>
+            <p>{learningEditorial.degreeInstitution}</p>
+            <h2>{learningEditorial.degreeTitle}</h2>
+            <span className="credential-date">{learningEditorial.degreeDate}</span>
+            <p className="credential-description">{learningEditorial.degreeFocus}</p>
+            <DegreeCertificateLightbox
+              src="/BSc-Computer-Science-Cyber-Security-Certificate-Gabriel-Gomes-2025.png"
+              alt="University of Greenwich Bachelor of Science Computer Science Cyber Security degree certificate awarded to Gabriel Humbert"
+              label={learningEditorial.viewDegree}
+              closeLabel={learningEditorial.closeDegree}
+              hint={learningEditorial.degreeHint}
+              variant="button"
+            />
+          </div>
+        </article>
 
         <article className="earned-credential" data-reveal>
           <div className="earned-credential-visual">

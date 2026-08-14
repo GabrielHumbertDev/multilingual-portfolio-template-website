@@ -4,6 +4,7 @@ import { content } from "@/lib/content";
 import type { CmsContent } from "@/lib/sanity";
 import { InteractiveMenu } from "@/components/InteractiveMenu";
 import { RevealController } from "@/components/RevealController";
+import { SiteControls } from "@/components/SiteControls";
 
 const defaultProfile = {
   displayName: "Gabriel Humbert",
@@ -99,6 +100,7 @@ function Header({
       </nav>
 
       <div className="header-actions">
+        <SiteControls locale={locale} />
         <div className="language-switcher" aria-label="Language selector">
           {(["en", "es", "pt-br"] as Locale[]).map((lang) => (
             <Link
@@ -216,13 +218,19 @@ function Shell({
   cms?: CmsContent | null;
   children: React.ReactNode;
 }) {
+  const skipLabel = {
+    en: "Skip to main content",
+    es: "Saltar al contenido principal",
+    "pt-br": "Ir para o conteúdo principal",
+  }[locale];
   return (
     <div className="site-frame" lang={locale}>
+      <a className="skip-link" href="#main-content">{skipLabel}</a>
       <RevealController />
       <div className="ambient ambient-one" aria-hidden="true" />
       <div className="ambient ambient-two" aria-hidden="true" />
       <Header locale={locale} page={page} cms={cms} />
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1}>{children}</main>
       <Footer locale={locale} cms={cms} />
     </div>
   );
